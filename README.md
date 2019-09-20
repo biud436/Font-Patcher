@@ -14,6 +14,7 @@ DLL : https://github.com/biud436/RGSS3/raw/master/FontPatcher/bin/RSFont.dll
 # Sources
 
 Font Patcher (EXE) : https://github.com/biud436/Font-Patcher
+
 RGSSFont (DLL) : https://github.com/biud436/RGSSFont
 
 # Setup

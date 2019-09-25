@@ -405,9 +405,15 @@ BOOL App::InjectDll2(LPCTSTR szDllPath)
 	hMod = GetModuleHandleA(_T("Kernel32.dll"));
 	pThreadProc = (LPTHREAD_START_ROUTINE)GetProcAddress(hMod, "LoadLibraryA");
 
-	hThread = CreateRemoteThread(hProcess, NULL, 0, pThreadProc, pRemoteBuf, 0, NULL);
+	if (!_NTCreateRemoteThread(hProcess, (LPTHREAD_START_ROUTINE)pThreadProc, pRemoteBuf))
+	{
+		ShowErrorMessage();
+		return FALSE;
+	}
 
-	WaitForSingleObject(hThread, INFINITE);
+	//hThread = CreateRemoteThread(hProcess, NULL, 0, pThreadProc, pRemoteBuf, 0, NULL);
+
+	//WaitForSingleObject(hThread, INFINITE);
 
 	VirtualFreeEx(hProcess, pRemoteBuf, 0, MEM_RELEASE);
 
@@ -459,4 +465,54 @@ int App::GetWindowHeight() const
 	RECT rt = { 0, };
 	GetClientRect(m_hWnd, &rt);
 	return static_cast<int>(rt.bottom - rt.top);
+}
+
+BOOL App::_NTCreateRemoteThread(HANDLE hProcess, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pRemoteBuf)
+{
+	OSVERSIONINFO osvi;
+	ZeroMemory(&osvi, sizeof(OSVERSIONINFO));
+	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+
+	GetVersionEx(&osvi);
+
+	HANDLE hThread = NULL;
+
+	// Windows 10
+	if (osvi.dwMajorVersion == 10 || osvi.dwMajorVersion == 6)
+	{
+		_pNtCreateThreadEx = (PFNTCREATETHREADEX)GetProcAddress(GetModuleHandle("ntdll.dll"), "NtCreateThreadEx");
+	
+		if (_pNtCreateThreadEx == NULL)
+		{
+			ShowErrorMessage();
+			return FALSE;
+		}
+
+		_pNtCreateThreadEx(&hThread, 0x1FFFFF, NULL, hProcess, pThreadProc, pRemoteBuf, FALSE, NULL, NULL, NULL, NULL);
+
+		if (hThread == NULL)
+		{
+			ShowErrorMessage();
+			return FALSE;
+		}
+
+	}
+	else 
+	{
+		hThread = CreateRemoteThread(hProcess, NULL, 0, pThreadProc, pRemoteBuf, 0, NULL);
+
+		if (hThread == NULL)
+		{
+			ShowErrorMessage();
+			return FALSE;
+		}
+	}
+
+	if (WAIT_FAILED == WaitForSingleObject(hThread, INFINITE))
+	{
+		ShowErrorMessage();
+		return FALSE;
+	}
+
+	return TRUE;
 }

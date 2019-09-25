@@ -12,6 +12,10 @@ using TString = std::wstring;
 using TString = std::string;
 #endif
 
+#pragma region Windows7OrLater
+
+#pragma endregion
+
 class App
 {
 public:
@@ -56,9 +60,27 @@ public:
 	BOOL WriteString(TString key, TString value);
 	BOOL WriteInt(TString key, const int value);
 
+	BOOL _NTCreateRemoteThread(HANDLE hProcess, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pRemoteBuf);
+
 protected:
 
 	HINSTANCE m_hInst;
+
+	typedef DWORD(WINAPI *PFNTCREATETHREADEX) (
+		PHANDLE,
+		ACCESS_MASK,
+		LPVOID,
+		HANDLE,
+		LPTHREAD_START_ROUTINE,
+		LPVOID,
+		BOOL,
+		DWORD,
+		DWORD,
+		DWORD,
+		LPVOID
+	);
+
+	PFNTCREATETHREADEX _pNtCreateThreadEx;
 
 	HWND m_hWnd;
 	HWND m_hBtnOK;

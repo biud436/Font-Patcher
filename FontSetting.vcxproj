@@ -150,10 +150,17 @@
   <ItemGroup>
     <ClInclude Include="App.h" />
     <ClInclude Include="constants.h" />
+    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />
     <Text Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FontPatcher.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\U\Desktop\myApp.ico" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

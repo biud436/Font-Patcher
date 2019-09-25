@@ -1,6 +1,7 @@
 #include <Windows.h>
 #include "constants.h"
 #include "App.h"
+#include "resource1.h"
 
 LPCTSTR lpszClass = TEXT("Font Patcher By Biud436");
 
@@ -16,7 +17,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpszCmd
 	WndClass.cbWndExtra = 0;
 	WndClass.hbrBackground = (HBRUSH)(COLOR_WINDOW);
 	WndClass.hCursor = LoadCursor(NULL, IDC_ARROW);
-	WndClass.hIcon = LoadIcon(NULL, IDI_APPLICATION);
+	WndClass.hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_ICON1));
 	WndClass.hInstance = hInstance;
 	WndClass.lpfnWndProc = WndProc;
 	WndClass.lpszClassName = lpszClass;

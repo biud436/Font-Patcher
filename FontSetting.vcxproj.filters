@@ -29,9 +29,22 @@
     <ClInclude Include="App.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="resource1.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="LICENSE.txt" />
     <Text Include="README.md" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="FontPatcher.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="C:\Users\U\Desktop\myApp.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
   </ItemGroup>
 </Project>
